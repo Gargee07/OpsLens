@@ -1,0 +1,92 @@
+{
+  "families": [
+    {
+      "root_cause": "db_connection_pool_exhaustion",
+      "description": "Connection pool maxed out under load, causing new requests to queue or fail",
+      "candidate_services": ["inventory-service", "db-primary"],
+      "symptom_phrasings": [
+        "checkout-service p99 latency spiking, seems to correlate with inventory-service",
+        "requests to inventory-service hanging, no error, just slow",
+        "getting intermittent 500s on inventory-service under peak traffic",
+        "db-primary showing connection refused errors sporadically",
+        "inventory-service throwing 'pool timeout' errors in logs"
+      ]
+    },
+    {
+      "root_cause": "downstream_api_timeout",
+      "description": "A downstream dependency (payment-gateway) is slow, causing cascading timeouts upstream",
+      "candidate_services": ["checkout-service", "payment-gateway"],
+      "symptom_phrasings": [
+        "checkout-service failing with gateway timeout errors",
+        "payment-gateway response times way up since this morning",
+        "orders stuck in pending state, no completion confirmation",
+        "checkout-service circuit breaker tripping repeatedly",
+        "customers reporting checkout hangs for 30+ seconds"
+      ]
+    },
+    {
+      "root_cause": "memory_leak",
+      "description": "Gradual memory growth in a service leading to OOM kills and restarts",
+      "candidate_services": ["notification-service"],
+      "symptom_phrasings": [
+        "notification-service pod restarting every few hours",
+        "memory usage on notification-service climbing steadily, never drops",
+        "OOMKilled events showing up for notification-service",
+        "notifications delayed, seems worse the longer the service has been up"
+      ]
+    },
+    {
+      "root_cause": "cache_stampede",
+      "description": "Cache expiry causes a burst of simultaneous requests to hit the DB directly",
+      "candidate_services": ["checkout-service", "db-primary"],
+      "symptom_phrasings": [
+        "sudden DB CPU spike every hour, on the hour",
+        "checkout-service latency briefly spikes then recovers, repeating pattern",
+        "db-primary load spikes correlate with cache TTL expiry",
+        "periodic short bursts of 5xx errors, self-resolving within a minute"
+      ]
+    },
+    {
+      "root_cause": "bad_deploy_config",
+      "description": "A deploy shipped with a misconfigured environment variable or feature flag",
+      "candidate_services": ["auth-service"],
+      "symptom_phrasings": [
+        "auth-service login failures spiking right after deploy",
+        "users getting logged out unexpectedly since this afternoon's release",
+        "auth-service throwing config validation errors on startup",
+        "token verification failing intermittently post-deploy"
+      ]
+    },
+    {
+      "root_cause": "rate_limit_misconfiguration",
+      "description": "An overly aggressive rate limit was deployed, blocking legitimate traffic",
+      "candidate_services": ["payment-gateway"],
+      "symptom_phrasings": [
+        "legitimate payment requests getting 429 errors",
+        "payment-gateway throttling way more traffic than expected",
+        "spike in 'rate limit exceeded' errors since last deploy",
+        "some customers can't complete payment, others unaffected"
+      ]
+    }
+  ],
+  "distractors": [
+    {
+      "note": "Wording overlaps with downstream_api_timeout family but root cause is different — DNS resolution issue, not a slow dependency",
+      "root_cause": "dns_resolution_failure",
+      "candidate_services": ["payment-gateway"],
+      "symptom_phrasing": "checkout-service failing to reach payment-gateway intermittently"
+    },
+    {
+      "note": "Wording overlaps with memory_leak family but root cause is a genuine traffic spike, not a leak",
+      "root_cause": "legitimate_traffic_spike",
+      "candidate_services": ["notification-service"],
+      "symptom_phrasing": "notification-service under heavy load, restarting under pressure"
+    }
+  ],
+  "novel_incident": {
+    "note": "No family — should trigger the guardrail 'no confident match' path",
+    "root_cause": "third_party_ssl_cert_expiry",
+    "candidate_services": ["auth-service"],
+    "symptom_phrasing": "auth-service SSL handshake failures with an external identity provider, first time this has happened"
+  }
+}

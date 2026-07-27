@@ -1,13 +1,19 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 .venv/
 .pytest_cache/
+*.egg-info/
+dist/
+build/
 
-# Environment
+# Environment — never commit secrets
 .env
+.env.*
+!.env.example
 
-# Node
+# Node / Frontend
 node_modules/
 .next/
 
@@ -19,9 +25,22 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Data
-data/raw/*
-!data/raw/.gitkeep
+# ── Data ──────────────────────────────────────────────────────────────────────
+# Raw downloaded / cloned data (re-creatable via pull_real_data.py)
+data/raw/
+backend/data/raw/
 
-data/synthetic/*
+# Synthetic LLM-generated incidents (re-creatable via generate_corpus.py)
+data/synthetic/
+backend/data/synthetic/
+
+# Keep folder placeholders so the directories exist after a fresh clone
+!data/raw/.gitkeep
 !data/synthetic/.gitkeep
+!backend/data/raw/.gitkeep
+!backend/data/synthetic/.gitkeep
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.log
+*.sqlite
+*.db

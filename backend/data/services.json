@@ -1,0 +1,28 @@
+{
+  "services": [
+    {
+      "name": "checkout-service",
+      "depends_on": ["payment-gateway", "inventory-service"]
+    },
+    {
+      "name": "payment-gateway",
+      "depends_on": ["auth-service"]
+    },
+    {
+      "name": "auth-service",
+      "depends_on": []
+    },
+    {
+      "name": "inventory-service",
+      "depends_on": ["db-primary"]
+    },
+    {
+      "name": "notification-service",
+      "depends_on": []
+    },
+    {
+      "name": "db-primary",
+      "depends_on": []
+    }
+  ]
+}

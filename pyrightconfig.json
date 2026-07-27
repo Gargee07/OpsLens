@@ -1,0 +1,11 @@
+{
+  "pythonVersion": "3.14",
+  "extraPaths": [
+    "data",
+    "scripts"
+  ],
+  "exclude": [
+    ".git",
+    "**/__pycache__"
+  ]
+}

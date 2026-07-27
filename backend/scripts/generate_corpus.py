@@ -13,7 +13,14 @@ from pydantic import ValidationError
 
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "data"))  # absolute path to data/ regardless of cwd
+from dotenv import load_dotenv
+
+# Load .env from repo root (OpsLens/) regardless of where the script is run from
+_repo_root = Path(__file__).resolve().parent.parent.parent  # OpsLens/
+load_dotenv(_repo_root / ".env")
+
+_backend_root = Path(__file__).resolve().parent.parent  # OpsLens/backend/
+sys.path.insert(0, str(_backend_root / "data"))  # adds backend/data/ so `from schema import Incident` works
 # pyrefly: ignore [missing-import]
 from schema import Incident
 
