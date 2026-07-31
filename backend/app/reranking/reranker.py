@@ -9,8 +9,10 @@ but much better at telling "genuinely relevant" apart from "superficially
 similar" (exactly what your distractor incidents are designed to test).
 """
 from sentence_transformers import CrossEncoder
+import torch
+torch.set_num_threads(4)
 
-_model = CrossEncoder("BAAI/bge-reranker-base")
+_model = CrossEncoder("BAAI/bge-reranker-base",max_length=256)
 
 
 def rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:

@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "grok>=6.2",
     "groq>=1.6.0",
+    "langfuse>=4.14.2",
     "pydantic>=2.13.4",
     "python-dotenv>=1.2.2",
     "qdrant-client>=1.18.0",
