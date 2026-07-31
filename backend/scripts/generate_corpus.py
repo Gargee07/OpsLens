@@ -38,12 +38,19 @@ def call_llm(prompt: str) -> str:
     resp = client.chat.completions.create(
         model=MODEL,
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.8,   # higher temperature = more wording diversity across variants
+        temperature=0.95,   # higher temperature = more wording diversity across variants
     )
     return resp.choices[0].message.content
 
 
 def generate_postmortem(root_cause: str, description: str, service: str, symptom: str) -> dict:
+    opening_style = random.choice([
+        "Start with what the on-call engineer directly observed or was told, in their own words.",
+        "Start with the specific alert or dashboard anomaly that triggered investigation.",
+        "Start mid-investigation, as if picking up partway through the debugging process.",
+        "Start with a customer-facing symptom report, before any internal alert fired.",
+    ])
+
     prompt = f"""You are writing an internal engineering postmortem. Return ONLY valid JSON, no markdown fences.
 
 Context:
@@ -53,6 +60,10 @@ Context:
 
 Write a realistic postmortem as if this really happened. Vary the specific numbers,
 timeline, and narrative voice each time — do not reuse boilerplate phrasing.
+
+STRICT REQUIREMENT: Do NOT open with a generic "On [date], at [time] UTC, our
+monitoring system alerted the on-call engineer..." sentence — every postmortem in
+this corpus currently starts this way and it needs to stop. {opening_style}
 
 Return JSON with exactly these keys:
 {{
