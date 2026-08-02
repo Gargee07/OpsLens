@@ -4,6 +4,8 @@ Run from backend/: uv run python scripts/build_index.py
 """
 import json
 import sys
+from dotenv import load_dotenv
+load_dotenv()
 sys.path.append(".")
 
 from app.ingestion.chunker import build_chunks

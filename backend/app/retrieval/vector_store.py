@@ -6,7 +6,13 @@ from qdrant_client.models import Distance, VectorParams, PointStruct
 COLLECTION = "incident_chunks"
 EMBED_DIM = 768   # bge-base-en-v1.5 output dimension
 
-_client = QdrantClient(url=os.environ.get("QDRANT_URL", "http://localhost:6333"))
+
+# _client = QdrantClient(url=os.environ.get("QDRANT_URL", "http://localhost:6333"))
+_client = QdrantClient(
+    url=os.environ.get("QDRANT_URL", "http://localhost:6333"),
+    api_key=os.environ.get("QDRANT_API_KEY"),
+)
+
 
 
 def init_collection():

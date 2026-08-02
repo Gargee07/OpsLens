@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "fastapi>=0.141.1",
     "grok>=6.2",
     "groq>=1.6.0",
     "langfuse>=4.14.2",
@@ -14,4 +15,5 @@ dependencies = [
     "rank-bm25>=0.2.2",
     "requests>=2.34.2",
     "sentence-transformers>=5.6.1",
+    "uvicorn>=0.52.1",
 ]
