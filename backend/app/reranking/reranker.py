@@ -1,12 +1,7 @@
 """backend/app/reranking/reranker.py"""
-import torch
 from sentence_transformers import CrossEncoder
 
-_model = CrossEncoder(
-    "BAAI/bge-reranker-base",
-    max_length=256,
-    model_kwargs={"torch_dtype": torch.float16},
-)
+_model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2", max_length=256)
 
 
 def rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:

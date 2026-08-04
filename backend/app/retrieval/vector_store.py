@@ -4,7 +4,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 
 COLLECTION = "incident_chunks"
-EMBED_DIM = 768   # bge-base-en-v1.5 output dimension
+EMBED_DIM = 384   
 
 
 # _client = QdrantClient(url=os.environ.get("QDRANT_URL", "http://localhost:6333"))

@@ -1,11 +1,7 @@
 """backend/app/retrieval/embedder.py"""
-import torch
 from sentence_transformers import SentenceTransformer
 
-_model = SentenceTransformer(
-    "BAAI/bge-base-en-v1.5",
-    model_kwargs={"torch_dtype": torch.float16},
-)
+_model = SentenceTransformer("BAAI/bge-small-en-v1.5")
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
